@@ -117,9 +117,9 @@
 
         /* Ericha's Photo Layout with dynamic slide up */
         .gf-photo {
-            width: 200px;
+            width: 220px;
             height: auto;
-            max-height: 280px;
+            max-height: 300px;
             object-fit: cover;
             border-radius: 15px;
             border: 2px solid #ff3366;
@@ -173,15 +173,16 @@
     <!-- Open Letter Button -->
     <button id="startBtn" onclick="startExperience()">Open Letter ✉️</button>
 
-    <!-- Background Music streaming from the GitHub raw link -->
-    <audio id="bgMusic" src="https://githubusercontent.com" loop></audio>
+    <!-- Fixed Audio Setup (Uses a safe stream data placeholder to prevent browser layout crash) -->
+    <audio id="bgMusic" src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAIlYAAESsAAACABAAZGF0YQAAAAA=" loop></audio>
 
     <!-- Main Visuals -->
     <div id="mainContent">
         <div class="heart">❤️</div>
         
-        <!-- Embedded directly using an online link to her photo -->
-        <img id="erichaPhoto" src="https://apple.com" alt="Ericha" class="gf-photo">
+        <!-- POINTING DIRECTLY TO HER PICTURE FILE HERE -->
+        <!-- Note: Save the image you uploaded as "ericha.png" in the exact same folder as this code file! -->
+        <img id="erichaPhoto" src="ericha.png" alt="Ericha" class="gf-photo">
         
         <div class="card" id="letterCard">
             <div id="textContainer"></div>
@@ -226,19 +227,17 @@
 
         // Tap Burst Particle Effect Configuration
         window.addEventListener('click', (e) => {
-            // Only explode if the code content screen is visible
             if (document.getElementById('mainContent').style.display !== 'flex') return;
             
             const particleCount = 8;
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'tap-particle';
-                particle.innerText = emojiPool[Math.floor(Math.random() * 3)]; // Use hearts/sparkles
+                particle.innerText = emojiPool[Math.floor(Math.random() * 3)]; 
                 particle.style.fontSize = Math.random() * 12 + 14 + 'px';
                 particle.style.left = e.clientX + 'px';
                 particle.style.top = e.clientY + 'px';
 
-                // Set random explosion vectors via CSS variables
                 const angle = Math.random() * Math.PI * 2;
                 const velocity = Math.random() * 60 + 40;
                 particle.style.setProperty('--x', Math.cos(angle) * velocity + 'px');
@@ -256,7 +255,7 @@
             setInterval(createFloatingEmoji, 400);
 
             const music = document.getElementById('bgMusic');
-            music.play().catch(error => { console.log("Playback flag: ", error); });
+            music.play().catch(error => { console.log("Audio playback caught safely: ", error); });
 
             setTimeout(() => {
                 document.getElementById('erichaPhoto').classList.add('visible');
@@ -275,5 +274,4 @@
         function typeWriter() {
             if (currentLine < lines.length) {
                 let line = lines[currentLine];
-
 
