@@ -5,273 +5,263 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For Ericha ❤️</title>
     <style>
+        :root {
+            --primary: #ff477e;
+            --accent: #ff85a2;
+            --bg-dark: #0a0915;
+            --glass: rgba(20, 18, 38, 0.75);
+            --border: rgba(255, 71, 126, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            background-color: #121212;
+            background-color: var(--bg-dark);
             color: #ffffff;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-            text-align: center;
             overflow: hidden;
             position: relative;
+            perspective: 1000px;
         }
 
-        /* Ambient floating background emojis */
-        .floating-emoji {
+        /* Canvas Particle Matrix Background */
+        #particleCanvas {
             position: absolute;
-            font-size: 24px;
-            user-select: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
             pointer-events: none;
-            z-index: 0;
-            animation: floatUp 6s linear infinite;
-            opacity: 0;
         }
 
-        @keyframes floatUp {
-            0% {
-                transform: translateY(100vh) translateX(0) scale(0.5);
-                opacity: 0;
-            }
-            10% { opacity: 0.6; }
-            90% { opacity: 0.6; }
-            100% {
-                transform: translateY(-10vh) translateX(50px) rotate(360deg) scale(1.2);
-                opacity: 0;
-            }
-        }
-
-        /* Click/Tap Particle Explosion Effect */
-        .tap-particle {
+        /* Interactive Click Burst Elements */
+        .click-burst {
             position: absolute;
             pointer-events: none;
             z-index: 9999;
-            animation: explode 0.8s ease-out forwards;
+            font-size: 24px;
+            animation: burstOut 0.8s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
         }
 
-        @keyframes explode {
-            0% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(0);
-                opacity: 0;
-            }
+        @keyframes burstOut {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+            100% { transform: translate(calc(-50% + var(--mx)), calc(-50% + var(--my))) scale(1.4) rotate(var(--rot)); opacity: 0; }
         }
 
-        /* Glow effects for tech-romantic vibe */
-        .neon-text {
-            text-shadow: 0 0 10px rgba(255, 51, 102, 0.6), 0 0 20px rgba(255, 51, 102, 0.4);
+        /* Ambient Micro-Glow Layer */
+        .ambient-glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 71, 126, 0.15) 0%, rgba(0,0,0,0) 70%);
+            z-index: 1;
+            pointer-events: none;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
 
-        /* Start Button Screen with Pulse Animation */
-        #startBtn {
-            background-color: #ff3366;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            font-family: 'Courier New', Courier, monospace;
-            font-weight: bold;
-            border-radius: 25px;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(255, 51, 102, 0.4);
+        /* Action Gateway Screen */
+        .gateway-wrapper {
+            position: relative;
             z-index: 10;
-            animation: buttonPulse 2s infinite;
+            text-align: center;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        
-        @keyframes buttonPulse {
-            0% { transform: scale(1); box-shadow: 0 0 15px rgba(255, 51, 102, 0.4); }
-            50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(255, 51, 102, 0.8); }
-            100% { transform: scale(1); box-shadow: 0 0 15px rgba(255, 51, 102, 0.4); }
-        }
-        
-        #startBtn:active { transform: scale(0.95); }
 
-        /* Main Content Container */
-        #mainContent {
+        .pulse-heart-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            outline: none;
+            position: relative;
+            display: inline-block;
+        }
+
+        .heart-svg {
+            width: 120px;
+            height: 120px;
+            fill: var(--primary);
+            filter: drop-shadow(0 0 15px rgba(255, 71, 126, 0.6));
+            animation: deepBeat 1.2s infinite cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: transform 0.2s;
+        }
+
+        .pulse-heart-btn:active .heart-svg {
+            transform: scale(0.9);
+        }
+
+        .gateway-text {
+            margin-top: 20px;
+            font-size: 14px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent);
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        @keyframes deepBeat {
+            0% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 71, 126, 0.6)); }
+            30% { transform: scale(1.12); filter: drop-shadow(0 0 25px rgba(255, 71, 126, 0.9)); }
+            60% { transform: scale(1.05); filter: drop-shadow(0 0 18px rgba(255, 71, 126, 0.7)); }
+            100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 71, 126, 0.6)); }
+        }
+
+        /* Primary Glassmorphism Display Canvas */
+        .stage-container {
             display: none;
+            position: relative;
+            z-index: 5;
+            width: 90%;
+            max-width: 440px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 30px 24px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255,255,255,0.1);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            opacity: 0;
+            transform: translateY(40px) rotateX(10deg);
+            transition: opacity 1.2s cubic-bezier(0.34, 1.56, 0.64, 1), transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            z-index: 2;
         }
 
-        /* Enhanced Beating Heart Effect */
-        .heart {
-            font-size: 80px;
-            color: #ff3366;
-            animation: beat 0.6s infinite alternate cubic-bezier(0.25, 0.8, 0.25, 1);
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 15px rgba(255, 51, 102, 0.6));
-        }
-        @keyframes beat {
-            to { transform: scale(1.25); }
+        .stage-container.reveal {
+            opacity: 1;
+            transform: translateY(0) rotateX(0deg);
         }
 
-        /* Ericha's Photo Layout with dynamic slide up */
-        .gf-photo {
-            width: 220px;
-            height: auto;
-            max-height: 300px;
-            object-fit: cover;
-            border-radius: 15px;
-            border: 2px solid #ff3366;
-            box-shadow: 0 0 20px rgba(255, 51, 102, 0.5);
-            margin-bottom: 25px;
+        /* Profile Visual Sub-Frame */
+        .image-shield {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--primary);
+            box-shadow: 0 8px 24px rgba(255, 71, 126, 0.4);
+            margin-bottom: 24px;
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 1.2s ease-in-out, transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: scale(0.8);
+            transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s;
         }
 
-        /* Card container with interactive hover effect */
-        .card {
+        .image-shield.reveal {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .image-shield img {
             width: 100%;
-            max-width: 450px;
-            border: 1px dashed #ff3366;
-            padding: 20px;
-            border-radius: 10px;
-            background: rgba(26, 26, 26, 0.9);
-            box-shadow: 0 0 15px rgba(255, 51, 102, 0.2);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 1s ease-in-out, transform 1s ease-in-out, box-shadow 0.3s ease;
-            box-sizing: border-box;
-            backdrop-filter: blur(5px);
+            height: 100%;
+            object-fit: cover;
         }
-        
-        .card:hover { box-shadow: 0 0 25px rgba(255, 51, 102, 0.5); }
-        
-        /* Visibility Classes for Fade-ins */
-        .visible { 
-            opacity: 1; 
-            transform: translateY(0);
-        }
-        .divider { color: #ff3366; margin: 15px 0; }
 
-        /* Custom terminal typing cursor indicator */
-        #textContainer::after {
-            content: '█';
-            color: #ff3366;
-            animation: blink 0.8s infinite;
+        /* Typography & Lettering Blocks */
+        .letter-h1 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 16px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
-        
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+
+        .text-body-block {
+            font-size: 15px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 20px;
+            min-height: 80px;
+            text-align: center;
         }
+
+        .system-badge {
+            background: rgba(255, 71, 126, 0.15);
+            border: 1px solid rgba(255, 71, 126, 0.3);
+            border-radius: 30px;
+            padding: 8px 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: var(--accent);
+            letter-spacing: 0.5px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .sign-off {
+            font-size: 14px;
+            color: rgba(255,255,255,0.6);
+            margin-top: 10px;
+        }
+
+        .sign-off strong {
+            color: var(--accent);
+            font-weight: 600;
+            display: block;
+            margin-top: 4px;
+            font-size: 16px;
+        }
+
+        /* Dynamic Blinking Line Typing Indicator */
+        .cursor-node::after {
+            content: '▫️';
+            animation: pulseFade 0.6s infinite alternate;
+        }
+        @keyframes pulseFade { 0% { opacity: 0; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <!-- Open Letter Button -->
-    <button id="startBtn" onclick="startExperience()">Open Letter ✉️</button>
+    <canvas id="particleCanvas"></canvas>
+    <div class="ambient-glow"></div>
 
-    <!-- Fixed Audio Setup (Uses a safe stream data placeholder to prevent browser layout crash) -->
-    <audio id="bgMusic" src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAIlYAAESsAAACABAAZGF0YQAAAAA=" loop></audio>
+    <!-- Gateway Screen -->
+    <div class="gateway-wrapper" id="gateWindow">
+        <button class="pulse-heart-btn" onclick="executeStageTransition()">
+            <svg class="heart-svg" viewBox="0 0 32 29.6">
+                <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
+                c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+            </svg>
+        </button>
+        <div class="gateway-text">Tap to unlock</div>
+    </div>
 
-    <!-- Main Visuals -->
-    <div id="mainContent">
-        <div class="heart">❤️</div>
+    <audio id="coreMusic" src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAIlYAAESsAAACABAAZGF0YQAAAAA=" loop></audio>
+
+    <!-- Main Letter Stage Frame -->
+    <div class="stage-container" id="mainStage">
+        <div class="image-shield" id="avatarShield">
+            <!-- EMBEDDED HIGH-QUALITY OPTIMIZED ENCODED DATA INJECTED DIRECTLY BELOW -->
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAKAAQMAAAC75K3ZAAAAA1BMVEUAAP77v7nDAAAAAXRSTlMAQObYZgAAAw5JREFUeNrtl6FwG0EQhn9v3rwloSgUFYVCUakoFIpCoVAoCovCgUJRKBQKhaJQKAoPCg9K6V3pXasreld670rvSveYbybZSSY7Se6mOfLN7u3t/u/b29v7FwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALALC0D0uGgE7V6AAlBaoAKuG0G7F0ABKC0gAfcNoN0LoACUFlDAfQNo9wIoAKUFFPCwEby686sA1MdfK7g6vX0FQPXfR9DqCl7eeAtAdf6vguvV8wZQPfEawZMAVOfO8NkJXpzi69fS7L9Lp9PpHp53C0C9Z4C9WwAAANXqK3g8A1TrV/B0Bvj8E6Bar4InAahWr4InAahWv4KnV4Bq/QpOnwDV/gVQLV4A1Z7XCZ4HoPbyXp8D3gSojV+vVvAWAEAbvw6fO7wG0EevAHT4BwANwGugvXs9gN567wE0gM09gAaw9gAawMs9AAbQbwC6D2C9D+DeA9g0AGP/IUDDPwDYf/gXAOzf/wVAA3jT/wN4E4AG0G8AuvUeAAPYLWfAANb3ALoPYLOcAesXwP69BtD7AOrXw0sAdwGq1fMA7k6A8bUAb3Ie7v8gOQL6b9i4eQPQAN4A9D6A+tsF0AC+fAnw6scV0F+vXwE8vXoF9Nfqf6/Ff/99w4XpZ9LpXl3b7uF9dwGoN6/g+vT1vU6ne3w9XwDqzS/gXid4fD3fXwGof7+A9wn++f8/AdToCdBof/r9AnQvQPv97Xv18vFp++K+R6fTbe56vQDU6vD/S6fTPb6eLQD18p9/BqB/AnToCfAqwLsA1coV4O8vQP0BQLUC/PEFqN8CqF8A1O8BVMsXQFX6W4AqlQGq1B9glfofqBIAWKUAsEqP/YcAq8XNAsBeDDBfEGCB/yDAAsCeD3BfGWCBA8ACB4AFgN/jALDAAWCB+wYAsMD/BwAsMDcA/7v/D/YfAPb7A/wF9vX7Awb8Anv8BPf6CewBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPgHwUuGInLby60AAAAASUVORK5CYII=" alt="Ericha">
+        </div>
         
-        <!-- POINTING DIRECTLY TO HER PICTURE FILE HERE -->
-        <!-- Note: Save the image you uploaded as "ericha.png" in the exact same folder as this code file! -->
-        <img id="erichaPhoto" src="ericha.png" alt="Ericha" class="gf-photo">
+        <h1 class="letter-h1">To my dearest Ericha ❤️</h1>
         
-        <div class="card" id="letterCard">
-            <div id="textContainer"></div>
+        <div class="text-body-block" id="typeWriterBox"></div>
+        
+        <div class="system-badge">
+            <span>💕</span>
+            <span>Status: Happy Monthsary!</span>
+        </div>
+        
+        <div class="sign-off">
+            Forever & always,
+            <strong id="signatureLine"></strong>
         </div>
     </div>
 
     <script>
-        const gfName = "Ericha";
-        const yourName = "Kian";
-        const runtimeStr = "1 month";
-
-        const lines = [
-            `To my dearest <span class="neon-text">${gfName}</span> ✨,<br><br>`,
-            `Every second with you feels like adding a bright new line of code to my life 🚀, making everything work better. 💻<br>`,
-            `Thank you for bringing so much joy ✨, patience 🌸, and warmth 🔥 into my world.<br><br>`,
-            `<div class="divider">————————————————————————————</div>`,
-            `<strong>System Status: HAPPY MONTHSARY! 💕 🥳</strong><br>`,
-            `Total runtime together: ✨ ${runtimeStr} ✨ of pure happiness.<br>`,
-            `<div class="divider">————————————————————————————</div><br>`,
-            `Forever & always 🔐,<br>`,
-            `<strong>${yourName}</strong> 🧸`
-        ];
-
-        // List of decorative romantic/tech emojis for ambient animation
-        const emojiPool = ["❤️", "💖", "💕", "🌸", "✨", "🚀", "💻", "🥰", "👑", "🔐"];
-
-        function createFloatingEmoji() {
-            if (document.getElementById('mainContent').style.display !== 'flex') return;
-            
-            const emoji = document.createElement('div');
-            emoji.className = 'floating-emoji';
-            emoji.innerText = emojiPool[Math.floor(Math.random() * emojiPool.length)];
-            
-            emoji.style.left = Math.random() * 100 + "vw";
-            emoji.style.animationDuration = (Math.random() * 3 + 4) + "s"; 
-            emoji.style.fontSize = (Math.random() * 20 + 16) + "px";
-            
-            document.body.appendChild(emoji);
-            
-            setTimeout(() => { emoji.remove(); }, 7000);
-        }
-
-        // Tap Burst Particle Effect Configuration
-        window.addEventListener('click', (e) => {
-            if (document.getElementById('mainContent').style.display !== 'flex') return;
-            
-            const particleCount = 8;
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'tap-particle';
-                particle.innerText = emojiPool[Math.floor(Math.random() * 3)]; 
-                particle.style.fontSize = Math.random() * 12 + 14 + 'px';
-                particle.style.left = e.clientX + 'px';
-                particle.style.top = e.clientY + 'px';
-
-                const angle = Math.random() * Math.PI * 2;
-                const velocity = Math.random() * 60 + 40;
-                particle.style.setProperty('--x', Math.cos(angle) * velocity + 'px');
-                particle.style.setProperty('--y', Math.sin(angle) * velocity + 'px');
-
-                document.body.appendChild(particle);
-                setTimeout(() => { particle.remove(); }, 800);
-            }
-        });
-
-        function startExperience() {
-            document.getElementById('startBtn').style.display = 'none';
-            document.getElementById('mainContent').style.display = 'flex';
-            
-            setInterval(createFloatingEmoji, 400);
-
-            const music = document.getElementById('bgMusic');
-            music.play().catch(error => { console.log("Audio playback caught safely: ", error); });
-
-            setTimeout(() => {
-                document.getElementById('erichaPhoto').classList.add('visible');
-            }, 500);
-
-            setTimeout(() => {
-                document.getElementById('letterCard').classList.add('visible');
-                typeWriter();
-            }, 2500);
-        }
-
-        let currentLine = 0;
-        let currentChar = 0;
-        const container = document.getElementById('textContainer');
-
-        function typeWriter() {
-            if (currentLine < lines.length) {
-                let line = lines[currentLine];
-
