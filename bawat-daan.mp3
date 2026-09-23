@@ -18,9 +18,59 @@
             padding: 20px;
             box-sizing: border-box;
             text-align: center;
+            overflow: hidden;
+            position: relative;
         }
 
-        /* Start Button Screen */
+        /* Ambient floating background emojis */
+        .floating-emoji {
+            position: absolute;
+            font-size: 24px;
+            user-select: none;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatUp 6s linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0.5);
+                opacity: 0;
+            }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% {
+                transform: translateY(-10vh) translateX(50px) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Click/Tap Particle Explosion Effect */
+        .tap-particle {
+            position: absolute;
+            pointer-events: none;
+            z-index: 9999;
+            animation: explode 0.8s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Glow effects for tech-romantic vibe */
+        .neon-text {
+            text-shadow: 0 0 10px rgba(255, 51, 102, 0.6), 0 0 20px rgba(255, 51, 102, 0.4);
+        }
+
+        /* Start Button Screen with Pulse Animation */
         #startBtn {
             background-color: #ff3366;
             color: white;
@@ -32,56 +82,107 @@
             border-radius: 25px;
             cursor: pointer;
             box-shadow: 0 0 15px rgba(255, 51, 102, 0.4);
-            transition: transform 0.2s;
+            z-index: 10;
+            animation: buttonPulse 2s infinite;
         }
-        #startBtn:active {
-            transform: scale(0.95);
+        
+        @keyframes buttonPulse {
+            0% { transform: scale(1); box-shadow: 0 0 15px rgba(255, 51, 102, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(255, 51, 102, 0.8); }
+            100% { transform: scale(1); box-shadow: 0 0 15px rgba(255, 51, 102, 0.4); }
         }
+        
+        #startBtn:active { transform: scale(0.95); }
 
-        /* Main Content (Hidden at first) */
+        /* Main Content Container */
         #mainContent {
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            z-index: 2;
         }
 
-        /* Visual Beating Heart Effect */
+        /* Enhanced Beating Heart Effect */
         .heart {
             font-size: 80px;
             color: #ff3366;
-            animation: beat 0.6s infinite alternate;
+            animation: beat 0.6s infinite alternate cubic-bezier(0.25, 0.8, 0.25, 1);
             margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(255, 51, 102, 0.6));
         }
         @keyframes beat {
-            to { transform: scale(1.15); }
+            to { transform: scale(1.25); }
         }
 
+        /* Ericha's Photo Layout with dynamic slide up */
+        .gf-photo {
+            width: 200px;
+            height: auto;
+            max-height: 280px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 2px solid #ff3366;
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.5);
+            margin-bottom: 25px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.2s ease-in-out, transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Card container with interactive hover effect */
         .card {
-            max-width: 500px;
+            width: 100%;
+            max-width: 450px;
             border: 1px dashed #ff3366;
             padding: 20px;
             border-radius: 10px;
-            background: #1a1a1a;
+            background: rgba(26, 26, 26, 0.9);
             box-shadow: 0 0 15px rgba(255, 51, 102, 0.2);
             opacity: 0;
-            transition: opacity 1s ease-in-out;
+            transform: translateY(20px);
+            transition: opacity 1s ease-in-out, transform 1s ease-in-out, box-shadow 0.3s ease;
+            box-sizing: border-box;
+            backdrop-filter: blur(5px);
         }
-        .visible { opacity: 1; }
+        
+        .card:hover { box-shadow: 0 0 25px rgba(255, 51, 102, 0.5); }
+        
+        /* Visibility Classes for Fade-ins */
+        .visible { 
+            opacity: 1; 
+            transform: translateY(0);
+        }
         .divider { color: #ff3366; margin: 15px 0; }
+
+        /* Custom terminal typing cursor indicator */
+        #textContainer::after {
+            content: '█';
+            color: #ff3366;
+            animation: blink 0.8s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- This button triggers the music play policy bypass -->
+    <!-- Open Letter Button -->
     <button id="startBtn" onclick="startExperience()">Open Letter ✉️</button>
 
-    <!-- Hidden audio element looking for your music file -->
-    <audio id="bgMusic" src="bawat-daan.mp3" loop></audio>
+    <!-- Background Music streaming from the GitHub raw link -->
+    <audio id="bgMusic" src="https://githubusercontent.com" loop></audio>
 
-    <!-- Main visual content container -->
+    <!-- Main Visuals -->
     <div id="mainContent">
         <div class="heart">❤️</div>
+        
+        <!-- Embedded directly using an online link to her photo -->
+        <img id="erichaPhoto" src="https://apple.com" alt="Ericha" class="gf-photo">
+        
         <div class="card" id="letterCard">
             <div id="textContainer"></div>
         </div>
@@ -93,35 +194,78 @@
         const runtimeStr = "1 month";
 
         const lines = [
-            `To my dearest ${gfName},<br><br>`,
-            `Every second with you feels like adding a bright new line of code to my life, making everything work better.<br>`,
-            `Thank you for bringing so much joy, patience, and warmth into my world.<br><br>`,
+            `To my dearest <span class="neon-text">${gfName}</span> ✨,<br><br>`,
+            `Every second with you feels like adding a bright new line of code to my life 🚀, making everything work better. 💻<br>`,
+            `Thank you for bringing so much joy ✨, patience 🌸, and warmth 🔥 into my world.<br><br>`,
             `<div class="divider">————————————————————————————</div>`,
-            `<strong>System Status: HAPPY MONTHSARY! 💕</strong><br>`,
-            `Total runtime together: ${runtimeStr} of pure happiness.<br>`,
+            `<strong>System Status: HAPPY MONTHSARY! 💕 🥳</strong><br>`,
+            `Total runtime together: ✨ ${runtimeStr} ✨ of pure happiness.<br>`,
             `<div class="divider">————————————————————————————</div><br>`,
-            `Forever & always,<br>`,
-            `<strong>${yourName}</strong>`
+            `Forever & always 🔐,<br>`,
+            `<strong>${yourName}</strong> 🧸`
         ];
 
-        function startExperience() {
-            // Hide the open button
-            document.getElementById('startBtn').style.display = 'none';
+        // List of decorative romantic/tech emojis for ambient animation
+        const emojiPool = ["❤️", "💖", "💕", "🌸", "✨", "🚀", "💻", "🥰", "👑", "🔐"];
+
+        function createFloatingEmoji() {
+            if (document.getElementById('mainContent').style.display !== 'flex') return;
             
-            // Show the main layout (heart and card container)
+            const emoji = document.createElement('div');
+            emoji.className = 'floating-emoji';
+            emoji.innerText = emojiPool[Math.floor(Math.random() * emojiPool.length)];
+            
+            emoji.style.left = Math.random() * 100 + "vw";
+            emoji.style.animationDuration = (Math.random() * 3 + 4) + "s"; 
+            emoji.style.fontSize = (Math.random() * 20 + 16) + "px";
+            
+            document.body.appendChild(emoji);
+            
+            setTimeout(() => { emoji.remove(); }, 7000);
+        }
+
+        // Tap Burst Particle Effect Configuration
+        window.addEventListener('click', (e) => {
+            // Only explode if the code content screen is visible
+            if (document.getElementById('mainContent').style.display !== 'flex') return;
+            
+            const particleCount = 8;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'tap-particle';
+                particle.innerText = emojiPool[Math.floor(Math.random() * 3)]; // Use hearts/sparkles
+                particle.style.fontSize = Math.random() * 12 + 14 + 'px';
+                particle.style.left = e.clientX + 'px';
+                particle.style.top = e.clientY + 'px';
+
+                // Set random explosion vectors via CSS variables
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 60 + 40;
+                particle.style.setProperty('--x', Math.cos(angle) * velocity + 'px');
+                particle.style.setProperty('--y', Math.sin(angle) * velocity + 'px');
+
+                document.body.appendChild(particle);
+                setTimeout(() => { particle.remove(); }, 800);
+            }
+        });
+
+        function startExperience() {
+            document.getElementById('startBtn').style.display = 'none';
             document.getElementById('mainContent').style.display = 'flex';
             
-            // Play "Bawat Daan" background music
-            const music = document.getElementById('bgMusic');
-            music.play().catch(error => {
-                console.log("Playback blocked or file missing: ", error);
-            });
+            setInterval(createFloatingEmoji, 400);
 
-            // Wait 3 seconds (heart animation delay) then show letter typing
+            const music = document.getElementById('bgMusic');
+            music.play().catch(error => { console.log("Playback flag: ", error); });
+
+            setTimeout(() => {
+                document.getElementById('erichaPhoto').classList.add('visible');
+            }, 500);
+
             setTimeout(() => {
                 document.getElementById('letterCard').classList.add('visible');
                 typeWriter();
-            }, 3000);
+            }, 2500);
         }
 
         let currentLine = 0;
@@ -131,29 +275,5 @@
         function typeWriter() {
             if (currentLine < lines.length) {
                 let line = lines[currentLine];
-                if (line.startsWith('<')) {
-                    container.innerHTML += line;
-                    currentLine++;
-                    setTimeout(typeWriter, 400);
-                } else {
-                    if (currentChar < line.length) {
-                        if (line.substring(currentChar, currentChar + 4) === '<br>') {
-                            container.innerHTML += '<br>';
-                            currentChar += 4;
-                        } else {
-                            container.innerHTML += line.charAt(currentChar);
-                            currentChar++;
-                        }
-                        setTimeout(typeWriter, 25);
-                    } else {
-                        currentLine++;
-                        currentChar = 0;
-                        setTimeout(typeWriter, 200);
-                    }
-                }
-            }
-        }
-    </script>
-</body>
-      </html>
+
 
